@@ -1,17 +1,16 @@
 # Vim9 Script for Python Developers
 
-A guide to Vim9 Script development for Python developers. Sample code for the various expressions, statements, functions and programming constructs is shown in both Python and Vim Script. This is not intended to be a tutorial for developing Vim scripts. It is assumed that the reader is familiar with Python programming.
+A guide to Vim9script development for Python developers. This guide presents sample code for various expressions, statements, functions, and programming constructs, shown in both Python and Vim9script. It is not intended as a tutorial on Vim script development, and assumes the reader is already familiar with Python programming.
 
-For an introduction to Vim Script development, refer to [usr_41.txt](https://vimhelp.org/usr_41.txt.html), [eval.txt](https://vimhelp.org/eval.txt.html) and [Learn Vimscript the Hard Way](https://learnvimscriptthehardway.stevelosh.com/)
+For an introduction to Vim9 Script development, refer to [vim9.txt](https://vimhelp.org/vim9.txt.html), [vim9class.txt](https://vimhelp.org/vim9class.txt.html), [usr_41.txt](https://vimhelp.org/usr_41.txt.html) and [eval.txt](https://vimhelp.org/eval.txt.html).
 
-This guide only describes the programming constructs that are present in both Python and Vim. The constructs that are unique to Vim (e.g. [autocommands](https://vimhelp.org/autocmd.txt.html#autocommands), [key-mapping](https://vimhelp.org/map.txt.html#key-mapping), [abbreviations](https://vimhelp.org/map.txt.html#abbreviations), [user-commands](https://vimhelp.org/map.txt.html#user-commands), [plugins](https://vimhelp.org/usr_05.txt.html#plugin), etc.) are not described in this guide.
+This guide focuses only on programming constructs that are common to both Python and Vim9. Constructs unique to Vim - such as [autocommands](https://vimhelp.org/autocmd.txt.html#autocommands), [key-mapping](https://vimhelp.org/map.txt.html#key-mapping), [abbreviations](https://vimhelp.org/map.txt.html#abbreviations), [user-commands](https://vimhelp.org/map.txt.html#user-commands) and [plugins](https://vimhelp.org/usr_05.txt.html#plugin) - are not covered in this guide.
 
 The Vim9 script features are only available starting from Vim 9.0.
 
 The Github repository for this gist is available at: https://github.com/yegappan/Vim9ScriptForPythonDevelopers.
 
-Note: The first command in a Vim9script file should be the 'vim9script'
-command.  In the examples used in this guide, for simplicity, this is omitted.
+*Note*: The first command in a Vim9script file should be the [:vim9script](https://vimhelp.org/repeat.txt.html#:vim9script) command.  However, for simplicity, this guide omits it from the examples.
 
 ------------------------------------------------------------------------------
 
@@ -99,6 +98,8 @@ var pi: float = 3.1415
 var str: string = "Hello"
 var [a: number, b: number, s: string] = [10, 20, "sky"]
 ```
+
+In Vim9script, strict type checking is recommended, so specifying the type of each variable is advised. However, for simplicity, this guide omits explicit type declarations and relies on inferred types instead.
 
 *Help:* [variables](https://vimhelp.org/eval.txt.html#variables)
 
@@ -824,9 +825,9 @@ zfill()| `str.zfill(10)` | `printf("%010s", "Hello")`
 l = [1, 2, 3, 4]
 ```
 
-**VimScript:**
+**Vim9script:**
 ```vim
-let l = [1, 2, 3, 4]
+var l = [1, 2, 3, 4]
 ```
 
 *Help:* [List](https://vimhelp.org/eval.txt.html#List)
@@ -840,11 +841,11 @@ v1 = l[2]
 v2 = l[-2]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3, 4]
-let v1 = l[2]
-let v2 = l[-2]
+var l = [1, 2, 3, 4]
+var v1 = l[2]
+var v2 = l[-2]
 ```
 
 *Help:* [list-index](https://vimhelp.org/eval.txt.html#list-index)
@@ -857,10 +858,10 @@ l = [1, 2, 3, 4]
 l[3] = 5
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3, 4]
-let l[3] = 5
+var l = [1, 2, 3, 4]
+var l[3] = 5
 ```
 
 *Help:* [list-modification](https://vimhelp.org/eval.txt.html#list-modification)
@@ -874,11 +875,11 @@ l.append(5)
 l += [6, 7]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = []
-call add(l, 5)
-let l += [5, 6]
+var l = []
+add(l, 5)
+var l += [5, 6]
 ```
 
 *Help:* [add()](https://vimhelp.org/builtin.txt.html#add%28%29)
@@ -892,11 +893,11 @@ l.extend([2, 3])
 l += [6, 7]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = []
-call extend(l, [2, 3])
-let l += [6, 7]
+var l = []
+l->extend([2, 3])
+l += [6, 7]
 ```
 
 *Help:* [extend()](https://vimhelp.org/builtin.txt.html#extend%28%29)
@@ -909,12 +910,12 @@ l = [1, 3]
 l.insert(1, 2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 3]
-" insert before index 1
+var l = [1, 3]
+# insert before index 1
 eval l->insert(2, 1)
-" insert at the begining
+# insert at the begining
 eval l->insert(5)
 ```
 
@@ -929,14 +930,15 @@ l.remove(5)
 del l[0]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [4, 5, 6]
-let idx = index(l, 5)
+var l = [4, 5, 6]
+var idx = index(l, 5)
 if idx != -1
-  call remove(l, idx)
+  remove(l, idx)
 endif
 unlet l[0]
+echo l
 ```
 
 *Help:* [remove()](https://vimhelp.org/builtin.txt.html#remove%28%29), [:unlet](https://vimhelp.org/eval.txt.html#%3aunlet)
@@ -949,10 +951,10 @@ l = [1, 2, 3]
 v = l.pop()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3]
-let v = l->remove(-1)
+var l = [1, 2, 3]
+var v = l->remove(-1)
 ```
 
 *Help:* [remove()](https://vimhelp.org/builtin.txt.html#remove%28%29)
@@ -965,10 +967,10 @@ l = [1, 2, 3]
 x = l.index(2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3]
-let x = l->index(2)
+var l = [1, 2, 3]
+var x = l->index(2)
 ```
 
 *Help:* [index()](https://vimhelp.org/builtin.txt.html#index%28%29)
@@ -982,10 +984,10 @@ idx = next((i for i, v in enumerate(colors) if v['color'] == 'blue'), -1)
 print(idx)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let colors = [{'color': 'red'}, {'color': 'blue'}, {'color': 'green'}]
-let idx = indexof(colors, {i, v -> v.color == 'blue'})
+var colors = [{color: 'red'}, {color: 'blue'}, {color: 'green'}]
+var idx = indexof(colors, (i, v) => v.color == 'blue')
 echo idx
 ```
 
@@ -1002,14 +1004,14 @@ print(l[1:3])
 print(l[2:])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3, 4]
-echo l[1:3]
-echo l[2:]
-echo l[-2:]
+var l = [1, 2, 3, 4]
+echo l[1 : 3]
+echo l[2 : ]
+echo l[-2 : ]
 
-" slice() function excludes the item at the end index.
+# slice() function excludes the item at the end index.
 echo slice(l, 2, 3)
 echo slice(l, 2)
 ```
@@ -1023,9 +1025,9 @@ echo slice(l, 2)
 l = [1, 2] + [3 ,4]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2] + [3 ,4]
+var l = [1, 2] + [3, 4]
 ```
 
 *Help:* [list-index](https://vimhelp.org/eval.txt.html#list-index)
@@ -1037,9 +1039,9 @@ let l = [1, 2] + [3 ,4]
 l = ['vim'] * 4
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = ['vim']->repeat(4)
+var l = ['vim']->repeat(4)
 ```
 
 *Help:* [repeat()](https://vimhelp.org/builtin.txt.html#repeat%28%29)
@@ -1052,10 +1054,10 @@ l = [2, 4, 4, 5]
 x = l.count(4)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [2, 4, 4, 5]
-let x = l->count(2)
+var l = [2, 4, 4, 5]
+var x = l->count(2)
 ```
 
 *Help:* [count()](https://vimhelp.org/builtin.txt.html#count%28%29)
@@ -1068,10 +1070,10 @@ l = ['a', 'b', 'c']
 n = len(l)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = ['a', 'b', 'c']
-let n = l->len()
+var l = ['a', 'b', 'c']
+var n = l->len()
 ```
 
 *Help:* [len()](https://vimhelp.org/builtin.txt.html#len%28%29)
@@ -1093,21 +1095,21 @@ for i in range(len(l)):
   print(i, l[i])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [10, 20, 30]
+var l = [10, 20, 30]
 for v in l
   echo v
 endfor
 
-" Print both the list index and the value
-for [i, v] in items(l)
-  echo i v
+# Print both the list index and the value
+for [i, v2] in items(l)
+  echo i v2
 endfor
 
-" Use a for loop for list iteration
-for i in range(len(l))
-  echo i l[i]
+# Use a for loop for list iteration
+for i2 in range(len(l))
+  echo i l[i2]
 endfor
 ```
 
@@ -1122,9 +1124,9 @@ l.sort()
 print(l)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [3, 2, 1]
+var l = [3, 2, 1]
 echo l->sort()
 ```
 
@@ -1140,10 +1142,10 @@ tset = set(l)
 print(list(tset))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-" needs a sorted list
-let l = ['a', 'b', 'b', 'c', 'c', 'd']
+# needs a sorted list
+var l = ['a', 'b', 'b', 'c', 'c', 'd']
 echo copy(l)->uniq()
 ```
 
@@ -1158,9 +1160,9 @@ l.reverse()
 print(l)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [1, 2, 3]
+var l = [1, 2, 3]
 echo reverse(l)
 ```
 
@@ -1174,10 +1176,10 @@ l = [3, 2, 1]
 l2 = l.copy()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [3, 2, 1]
-let l2 = l->copy()
+var l = [3, 2, 1]
+var l2 = l->copy()
 ```
 
 *Help:* [copy()](https://vimhelp.org/builtin.txt.html#copy%28%29)
@@ -1191,10 +1193,10 @@ a = [[1, 2], [3, 4]]
 b = copy.deepcopy(a)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let a = [[1, 2], [3, 4]]
-let b = a->deepcopy()
+var a = [[1, 2], [3, 4]]
+var b = a->deepcopy()
 ```
 
 *Help:* [deepcopy()](https://vimhelp.org/builtin.txt.html#deepcopy%28%29)
@@ -1207,9 +1209,9 @@ l = [3, 2, 1]
 l.clear()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [3, 2, 1]
+var l = [3, 2, 1]
 unlet l[:]
 ```
 
@@ -1232,16 +1234,16 @@ if l1 != l3:
   print("Lists l1 and l3 are different")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l1 = [1, 2]
-let l2 = l1
-let l3 = [1, 2]
+var l1 = [1, 2]
+var l2 = l1
+var l3 = [1, 2]
 if l1 is l2
   echo "Lists l1 and l2 refer to the same list"
 endif
 if l1 isnot l3
-  echo "Lists l1 and l2 do not refer to the same list"
+  echo "Lists l1 and l3 do not refer to the same list"
 endif
 if l1 == l3
   echo "Lists l1 and l3 contain the same elements"
@@ -1263,9 +1265,10 @@ odd = list(filter(lambda x: x % 2, range(10)))
 odd = [x for x in range(10) if x % 2]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let odd = filter(range(10), {idx, v -> v % 2})
+var odd = filter(range(10), (idx, v) => v % 2)
+echo odd
 ```
 
 *Help:* [filter()](https://vimhelp.org/builtin.txt.html#filter%28%29)
@@ -1280,9 +1283,10 @@ num_str = list(map(lambda x: str(x), range(10)))
 num_str = [str(x) for x in range(10)]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let num_str = map(range(10), {idx, v -> string(v)})
+var num_str = map(range(10), (idx, v) => string(v))
+echo num_str
 ```
 
 *Help:* [map()](https://vimhelp.org/builtin.txt.html#map%28%29)
@@ -1301,17 +1305,17 @@ def SumNum(a, b):
 sum = reduce(SumNum, [1, 2, 3, 4])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-" using a lambda function
-let sum = reduce([1, 2, 3, 4], {x, y -> x + y})
+# using a lambda function
+var sum = reduce([1, 2, 3, 4], (x, y) => x + y)
 
-" using a function
-func SumNum(x, y)
-  return a:x + a:y
-endfunc
-let sum = reduce([1, 2, 3, 4], function('SumNum'))
-echo sum
+# using a function
+def SumNum(x: number, y: number): number
+  return x + y
+enddef
+var sum2 = reduce([1, 2, 3, 4], function('SumNum'))
+echo sum2
 ```
 
 *Help:* [reduce()](https://vimhelp.org/builtin.txt.html#reduce%28%29)
@@ -1325,10 +1329,10 @@ flattenlist = [i for subl in l for i in subl]
 print(flattenlist)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [[5, 9], [1, 3], [10, 20]]
-let flattenlist = flattennew(l)
+var l = [[5, 9], [1, 3], [10, 20]]
+var flattenlist = flattennew(l)
 echo flattenlist
 ```
 
@@ -1344,11 +1348,11 @@ v2 = max(l)
 print(v1, v2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [3, 10, 8]
-let v1 = l->min()
-let v2 = l->max()
+var l = [3, 10, 8]
+var v1 = l->min()
+var v2 = l->max()
 echo v1 v2
 ```
 
@@ -1361,16 +1365,17 @@ echo v1 v2
 s = str([3, 5, 7])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let s = string([3, 5, 7])
+var s = string([3, 5, 7])
+echo s
 ```
 
 *Help:* [string()](https://vimhelp.org/builtin.txt.html#string%28%29)
 
 ### List Methods
 
-Method|Python|VimScript
+Method|Python|Vim9Script
 ----|------|---------
 append()| `m.append(6)` | `m->add(6)`
 clear()| `m.clear()` | `unlet m[:]`
