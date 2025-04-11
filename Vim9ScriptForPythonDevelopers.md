@@ -2398,7 +2398,7 @@ endwhile
 i = 0    # First iteration
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 # This is a Vim9script comment
 var i = 0    # First iteration
@@ -2410,11 +2410,7 @@ var i = 0    # First iteration
 
 ## Function
 
-The names of global functions in Vim must start with an uppercase letter.
-The examples in this document use the "function" and "endfunction" keywords for
-defining a function. But these can be abbreviated as "func" and "endfunc".
-
-When a function encounters an error, it will continue to execute the rest of the function unless the "abort" argument is specified when defining the function. So it is recommended to specify the "abort" keyword at the end of the "function" line. To simplify the example code, this keyword is not used in this guide.
+Functions in a Vim9script are automatically compiled.  A Vim9 function name must start with an uppercase letter.
 
 ### Defining a Function
 
@@ -2426,11 +2422,11 @@ def Min(x, y):
 print(Min(6, 3)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Min(x, y) abort
-  return a:x < a:y ? a:x : a:y
-endfunction
+def Min(x: number, y: number): number
+  return x < y ? x : y
+enddef
 
 echo Min(6, 3)
 ```
@@ -2447,11 +2443,11 @@ def EchoValue(v):
 EchoValue(100)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function EchoValue(v)
-  echo a:v
-endfunction
+def EchoValue(v: number)
+  echo v
+enddef
 
 call EchoValue(100)
 ```
@@ -2468,13 +2464,13 @@ def Sum(a, b):
 s = Sum(10, 20)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Sum(a, b)
-  return a:a + a:b
-endfunction
+def Sum(a: number, b: number): number
+  return a + b
+enddef
 
-let s = Sum(10, 20)
+var s = Sum(10, 20)
 ```
 
 *Help:* [:return](https://vimhelp.org/eval.txt.html#%3areturn)
@@ -2487,11 +2483,11 @@ def AddValues(l):
     l.extend([1, 2, 3, 4])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function AddValues(l)
-  call extend(a:l, [1, 2, 3, 4])
-endfunction
+def AddValues(l: list<number>)
+  l->extend([1, 2, 3, 4])
+enddef
 ```
 
 *Help:* [function-argument](https://vimhelp.org/eval.txt.html#function-argument)
@@ -2507,17 +2503,17 @@ def Sum(v1, *args):
     return sum
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Sum(v1, ...)
-  let sum = a:v1
-  for i in a:000
-    let sum +=i
+def Sum(v1: number, ...rest: list<number>): number
+  var sum = v1
+  for i in rest
+    sum += i
   endfor
   return sum
-endfunction
-let s1 = Sum(10, 20, 30, 40)
-let s1 = Sum(10)
+enddef
+var s1 = Sum(10, 20, 30, 40)
+s1 = Sum(10)
 ```
 
 *Help:* [a:000](https://vimhelp.org/eval.txt.html#a%3a000)
@@ -2530,13 +2526,15 @@ def Powerof(base, exp = 2):
     return base ** exp
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function PowerOf(base, exp = 2)
-  return float2nr(pow(a:base, a:exp))
-endfunction
-let val = PowerOf(4)
-let val = PowerOf(4, 3)
+def PowerOf(base: number, exp: number = 2): number
+  return float2nr(pow(base, exp))
+enddef
+var val = PowerOf(4)
+echo val
+val = PowerOf(4, 3)
+echo val
 ```
 
 *Help:* [optional-function-argument](https://vimhelp.org/eval.txt.html#optional-function-argument)
@@ -2551,13 +2549,14 @@ def Incr():
     counter += 1
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let counter = 1
-function Incr()
-  let g:counter += 1
-endfunction
-cal Incr()
+g:counter = 1
+def Incr()
+  g:counter += 1
+enddef
+Incr()
+echo g:counter
 ```
 
 *Help:* [global-variable](https://vimhelp.org/eval.txt.html#global-variable)
@@ -2572,13 +2571,13 @@ Bar = Foo
 Bar()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Foo()
+def Foo()
   echo "Foo"
-endfunction
-let Bar = function("Foo")
-call Bar()
+enddef
+var Bar = function("Foo")
+Bar()
 ```
 
 *Help:* [Funcref](https://vimhelp.org/eval.txt.html#Funcref)
@@ -2593,10 +2592,10 @@ F = lambda x , y: x - y
 print(F(5,2))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let F = {x, y -> x - y}
-echo F(5,2)
+var F = (x, y) => x - y
+echo F(5, 2)
 ```
 
 *Help:* [lambda](https://vimhelp.org/eval.txt.html#lambda)
@@ -2615,14 +2614,14 @@ ErrLog = functools.partial(Mylog, 'ERR')
 ErrLog("Failed to open file")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Mylog(subsys, msg)
-  echo printf("%s: %s", a:subsys, a:msg)
-endfunction
+def Mylog(subsys: string, msg: string)
+  echo printf("%s: %s", subsys, msg)
+enddef
 
-let ErrLog = function('Mylog', ['ERR'])
-call ErrLog("Failed to open file")
+var ErrLog = function('Mylog', ['ERR'])
+ErrLog("Failed to open file")
 ```
 
 *Help:* [Partial](https://vimhelp.org/eval.txt.html#Partial)
@@ -2643,14 +2642,14 @@ bar = foo(4)
 print(bar(6))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Foo(arg)
-  let i = 3
-  return {x -> x + i - a:arg}
-endfunction
+def Foo(arg: number): func
+  var i = 3
+  return (x) => x + i - arg
+enddef
 
-let Bar = Foo(4)
+var Bar = Foo(4)
 echo Bar(6)
 ```
 
@@ -2671,18 +2670,18 @@ F = Foo(20)
 print(F(2))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Foo(base)
-  function Bar(val) closure
-    return a:base + a:val
-  endfunction
-  return funcref('Bar')
-endfunction
+def Foo(base: number): func
+  def g:Bar(val: number): number
+    return base + val
+  enddef
+  return funcref('g:Bar')
+enddef
 
-let F = Foo(10)
+var F = Foo(10)
 echo F(2)
-let F = Foo(20)
+F = Foo(20)
 echo F(2)
 ```
 
@@ -2714,58 +2713,56 @@ class Point:
         self.y = y
 
     def Print(self):
-        print("Pt = (" + str(self.x) + ", " + str(self.y) + ")")
+        print(f"Pt = ({self.x}, {self.y})")
 
 pt = Point(10, 20)
 pt.setX(40)
 pt.setY(50)
 pt.Print()
+print(f"x = {pt.getX()}, y = {pt.getY()}")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function s:new(x, y) dict
-  let newpt = copy(self)
-  let newpt.x = a:x
-  let newpt.y = a:y
-  return newpt
-endfunction
+vim9script
+class Point
+  var x: number
+  var y: number
 
-function s:getX() dict
-  return self.x
-endfunction
+  def new(x: number, y: number)
+    this.x = x
+    this.y = y
+  enddef
 
-function s:getY() dict
-  return self.y
-endfunction
+  def GetX(): number
+    return this.x
+  enddef
 
-function s:setX(x) dict
-  let self.x = a:x
-endfunction
+  def GetY(): number
+    return this.y
+  enddef
 
-function s:setY(y) dict
-  let self.y = a:y
-endfunction
+  def SetX(x: number)
+    this.x = x
+  enddef
 
-function s:Print() dict
-  echo "Pt = (" .. self.x .. ", " .. self.y .. ")"
-endfunction
+  def SetY(y: number)
+    this.y = y
+  enddef
 
-let Point = {}
-let Point.new = function("s:new")
-let Point.getX = function("s:getX")
-let Point.getY = function("s:getY")
-let Point.setX = function("s:setX")
-let Point.setY = function("s:setY")
-let Point.Print = function("s:Print")
+  def Print()
+    echo $"Pt = ({this.x}, {this.y})"
+  enddef
+endclass
 
-let p = Point.new(10, 20)
-call p.setX(40)
-call p.setY(50)
-call p.Print()
+var pt = Point.new(10, 20)
+pt.SetX(40)
+pt.SetY(50)
+pt.Print()
+echo $"x = {pt.GetX()}, y = {pt.GetY()}"
 ```
 
-*Help:* [Dictionary-function](https://vimhelp.org/eval.txt.html#Dictionary-function), [numbered-function](https://vimhelp.org/eval.txt.html#numbered-function), [:func-dict](https://vimhelp.org/eval.txt.html#%3afunc-dict)
+*Help:* [vim9-class](https://vimhelp.org/vim9class.txt.html#vim9-class)
 
 ------------------------------------------------------------------------------
 
@@ -2783,10 +2780,10 @@ except IOError:
     print("Failed to open file")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 try
-  let l = readfile('buf.java')
+  var l = readfile('buf.java')
 catch /E484:/
   echo "Failed to read file"
 endtry
@@ -2806,12 +2803,12 @@ except Exception as e:
     print("Caught " + str(e))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 try
-  let l = readfile('buf.java')
+  var l = readfile('buf.java')
 catch
-  echo "Caught " .. v:exception
+  echo $"Caught {v:exception}"
 endtry
 ```
 
@@ -2829,10 +2826,10 @@ finally:
     print("executing code in finally block")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 try
-  let l = readfile('buf.java')
+  var l = readfile('buf.java')
 finally
   echo "executing code in finally block"
 endtry
@@ -2853,7 +2850,7 @@ finally:
     print("Finally block")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 try
   throw 'MyException'
@@ -2874,12 +2871,14 @@ endtry
 ```python
 a = 1 + 2 + 3 + \
       4 + 5 + 6
+print(a)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let a = 1 + 2 + 3 +
-      \ 4 + 5 + 6
+var a = 1 + 2 + 3 +
+        4 + 5 + 6
+echo a
 ```
 
 *Help:* [line-continuation](https://vimhelp.org/eval.txt.html#line-continuation)
@@ -2899,10 +2898,10 @@ with open('myfile.txt', 'r') as f:
 # lines == ['line1\n', 'line2\n'] 
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let lines = readfile("myfile.txt")
-" lines == ['line1', 'line2'] 
+var lines = readfile("myfile.txt")
+# lines == ['line1', 'line2'] 
 ```
 
 *Help:* [readfile()](https://vimhelp.org/builtin.txt.html#readfile%28%29)
@@ -2919,9 +2918,9 @@ with open('myfile.txt', 'w') as fh:
     print(*lines, sep='\n', file=fh)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call writefile(['line1', 'line2'], 'myfile.txt')
+writefile(['line1', 'line2'], 'myfile.txt')
 ```
 
 *Help:* [writefile()](https://vimhelp.org/builtin.txt.html#writefile%28%29)
@@ -2934,9 +2933,9 @@ with open('myfile.txt', 'a') as fh:
     fh.writelines(lines)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call writefile(['line3', 'line4'], 'myfile.txt', 'a')
+writefile(['line3', 'line4'], 'myfile.txt', 'a')
 ```
 
 *Help:* [writefile()](https://vimhelp.org/builtin.txt.html#writefile%28%29)
@@ -2949,7 +2948,7 @@ if os.path.isfile('myfile.txt'):
     print("File exists")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 if filereadable('myfile.txt')
   echo "File is readable"
@@ -2965,9 +2964,9 @@ import os
 os.remove('myfile.txt')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call delete('myfile.txt')
+delete('myfile.txt')
 ```
 
 *Help:* [remove()](https://vimhelp.org/builtin.txt.html#remove%28%29)
@@ -2979,9 +2978,9 @@ import os
 os.rename('myfile.txt', 'somefile.txt)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call rename('myfile.txt', 'somefile.txt')
+rename('myfile.txt', 'somefile.txt')
 ```
 
 *Help:* [rename()](https://vimhelp.org/builtin.txt.html#rename%28%29)
@@ -2993,9 +2992,9 @@ import os
 sz = os.path.getsize('move.py')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let sz = getfsize('move.py')
+var sz = getfsize('move.py')
 ```
 
 *Help:* [getfsize()](https://vimhelp.org/builtin.txt.html#getfsize%28%29)
@@ -3010,9 +3009,9 @@ let sz = getfsize('move.py')
 os.mkdir('somedir')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call mkdir('somedir')
+mkdir('somedir')
 ```
 
 *Help:* [mkdir()](https://vimhelp.org/builtin.txt.html#mkdir%28%29)
@@ -3023,9 +3022,9 @@ call mkdir('somedir')
 os.chdir('someotherdir')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call chdir('someotherdir')
+chdir('someotherdir')
 ```
 
 *Help:* [chdir()](https://vimhelp.org/builtin.txt.html#chdir%28%29)
@@ -3036,9 +3035,9 @@ call chdir('someotherdir')
 dir = os.getcwd()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let dir = getcwd()
+var dir = getcwd()
 ```
 
 *Help:* [getcwd()](https://vimhelp.org/builtin.txt.html#getcwd%28%29)
@@ -3049,9 +3048,9 @@ let dir = getcwd()
 os.rmdir('somedir')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call delete('somedir', 'd')
+delete('somedir', 'd')
 ```
 
 *Help:* [delete()](https://vimhelp.org/builtin.txt.html#delete%28%29)
@@ -3070,17 +3069,17 @@ for f in dir:
   print(f.stat())
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let dir = readdir('.')
+var dir = readdir('.')
 for f in dir
   echo f
 endfor
 
-" get extended file information
-let dir = readdirex('.')
-for f in dir
-  echo f
+# get extended file information
+var dir2 = readdirex('.')
+for f2 in dir2
+  echo f2
 endfor
 ```
 
@@ -3097,9 +3096,9 @@ import random
 r = random.randint(0, 2147483647)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let r = rand()
+var r = rand()
 ```
 
 *Help:* [rand()](https://vimhelp.org/builtin.txt.html#rand%28%29)
@@ -3113,10 +3112,10 @@ r = random.randint(0, 2147483647)
 print(r)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let seed = srand()
-let r = rand(seed)
+var seed = srand()
+var r = rand(seed)
 ```
 
 *Help:* [srand()](https://vimhelp.org/builtin.txt.html#srand%28%29)
@@ -3125,28 +3124,28 @@ let r = rand(seed)
 
 ## Mathematical Functions
 
-Function|Python|VimScript
+Function|Python|Vim9Script
 ----|------|---------
-abs| `f = math.fabs(-10)` | `let f = abs(-10)`
-acos| `f = math.acos(0.8)` | `let f = acos(0.8)`
-asin| `f = math.asin(0.8)` | `let f = asin(0.8)`
-atan| `f = math.atan(0.8)` | `let f = atan(0.8)`
-atan2| `f = math.atan2(0.4, 0.8)` | `let f = atan2(0.4, 0.8)`
-ceil| `f = math.ceil(1.2)` | `let f = ceil(1.2)`
-cos| `f = math.cos(4)` | `let f = cos(4)`
-cosh| `f = math.cosh(4)` | `let f = cosh(4)`
-exp| `f = math.exp(2)` | `let f = exp(2)`
-floor| `f = math.floor(1.4)` | `let f = floor(1.4)`
-log| `f = math.log(12)` | `let f = log(12)`
-log10| `f = math.log10(100)` | `let f = log10(100)`
-mod| `f = math.fmod(4, 3)` | `let f = fmod(4, 3)`
-pow| `f = math.pow(2, 3)` | `let f = pow(2, 3)`
-sin| `f = math.sin(4)` | `let f = sin(4)`
-sinh| `f = math.sinh(4)` | `let f = sinh(4)`
-sqrt| `f = math.sqrt(9)` | `let f = sqrt(9)`
-tan| `f = math.tan(4)` | `let f = tan(4)`
-tanh| `f = math.tanh(4)` | `let f = tanh(4)`
-trunc| `f = math.trunc(1.3)` | `let f = trunc(1.3)`
+abs| `f = math.fabs(-10)` | `var f = abs(-10)`
+acos| `f = math.acos(0.8)` | `var f = acos(0.8)`
+asin| `f = math.asin(0.8)` | `var f = asin(0.8)`
+atan| `f = math.atan(0.8)` | `var f = atan(0.8)`
+atan2| `f = math.atan2(0.4, 0.8)` | `var f = atan2(0.4, 0.8)`
+ceil| `f = math.ceil(1.2)` | `var f = ceil(1.2)`
+cos| `f = math.cos(4)` | `var f = cos(4)`
+cosh| `f = math.cosh(4)` | `var f = cosh(4)`
+exp| `f = math.exp(2)` | `var f = exp(2)`
+floor| `f = math.floor(1.4)` | `var f = floor(1.4)`
+log| `f = math.log(12)` | `var f = log(12)`
+log10| `f = math.log10(100)` | `var f = log10(100)`
+mod| `f = math.fmod(4, 3)` | `var f = fmod(4, 3)`
+pow| `f = math.pow(2, 3)` | `var f = pow(2, 3)`
+sin| `f = math.sin(4)` | `var f = sin(4)`
+sinh| `f = math.sinh(4)` | `var f = sinh(4)`
+sqrt| `f = math.sqrt(9)` | `var f = sqrt(9)`
+tan| `f = math.tan(4)` | `var f = tan(4)`
+tanh| `f = math.tanh(4)` | `var f = tanh(4)`
+trunc| `f = math.trunc(1.3)` | `var f = trunc(1.3)`
 
 *Help:* [ceil()](https://vimhelp.org/builtin.txt.html#ceil%28%29), [abs()](https://vimhelp.org/builtin.txt.html#abs%28%29), [floor()](https://vimhelp.org/builtin.txt.html#floor%28%29), [fmod()](https://vimhelp.org/builtin.txt.html#fmod%28%29), [trunc()](https://vimhelp.org/builtin.txt.html#trunc%28%29), [exp()](https://vimhelp.org/builtin.txt.html#exp%28%29), [log()](https://vimhelp.org/builtin.txt.html#log%28%29), [log10()](https://vimhelp.org/builtin.txt.html#log10%28%29), [pow()](https://vimhelp.org/builtin.txt.html#pow%28%29), [sqrt()](https://vimhelp.org/builtin.txt.html#sqrt%28%29), [cos()](https://vimhelp.org/builtin.txt.html#cos%28%29), [sin()](https://vimhelp.org/builtin.txt.html#sin%28%29), [tan()](https://vimhelp.org/builtin.txt.html#tan%28%29), [cosh()](https://vimhelp.org/builtin.txt.html#cosh%28%29), [sinh()](https://vimhelp.org/builtin.txt.html#sinh%28%29), [tanh()](https://vimhelp.org/builtin.txt.html#tanh%28%29), [acos()](https://vimhelp.org/builtin.txt.html#acos%28%29), [asin()](https://vimhelp.org/builtin.txt.html#asin%28%29), [atan()](https://vimhelp.org/builtin.txt.html#atan%28%29), [atan2()](https://vimhelp.org/builtin.txt.html#atan2%28%29)
 
@@ -3163,7 +3162,7 @@ d = datetime.now()
 print(d.strftime("%c"))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 echo strftime("%c")
 ```
@@ -3178,7 +3177,7 @@ from datetime import datetime
 print(datetime.strptime("1997 Apr 27 11:49:23", "%Y %b %d %X"))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 echo strptime("%Y %b %d %X", "1997 Apr 27 11:49:23")
 ```
@@ -3193,7 +3192,7 @@ import time
 print int(time.time())
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 echo localtime()
 ```
@@ -3213,14 +3212,14 @@ end_time = time.perf_counter()
 print("Elapsed time " + str(end_time - start_time))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let start = reltime()
-let sum = 0
+var start = reltime()
+var sum = 0
 for i in range(1000)
-  let sum += i
+  sum += i
 endfor
-let elapsed_time = reltime(start)
+var elapsed_time = reltime(start)
 echo "Elasped time" reltimefloat(elapsed_time)
 ```
 
@@ -3243,11 +3242,11 @@ print(lines)
 print("Error = " + str(procObj.returncode))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let lines = system('grep class *.java')
+var lines = system('grep class *.java')
 echo lines
-echo "Error = " .. v:shell_error
+echo $"Error = {v:shell_error}"
 ```
 
 *Help:* [system()](https://vimhelp.org/builtin.txt.html#system%28%29), [v:shell_error](https://vimhelp.org/eval.txt.html#v%3ashell_error)
@@ -3264,10 +3263,10 @@ lines, err = procObj.communicate()
 print("Number of matches = " + str(len(lines.splitlines())))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let lines = systemlist('grep class *.java')
-echo "Number of matches = " .. len(lines)
+var lines = systemlist('grep class *.java')
+echo $"Number of matches = {len(lines)}"
 ```
 
 *Help:* [systemlist()](https://vimhelp.org/builtin.txt.html#systemlist%28%29)
@@ -3286,11 +3285,11 @@ print(lines)
 print("Error = " + str(procObj.returncode))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let lines = system('wc', "one\ntwo\n")
+var lines = system('wc', "one\ntwo\n")
 echo lines
-echo "Error = " .. v:shell_error
+echo $"Error = {v:shell_error}"
 ```
 
 *Help:* [system()](https://vimhelp.org/builtin.txt.html#system%28%29)
@@ -3307,10 +3306,10 @@ choice = input("coffee or tea? ")
 print("You selected " + choice)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let ans = input("coffee or tea? ", "tea")
-echo "You selected " .. ans
+var ans = input("coffee or tea? ", "tea")
+echo $"You selected {ans}"
 ```
 
 *Help:* [input()](https://vimhelp.org/builtin.txt.html#input%28%29), [inputlist()](https://vimhelp.org/builtin.txt.html#inputlist%28%29), [inputdialog()](https://vimhelp.org/builtin.txt.html#inputdialog%28%29)
@@ -3324,10 +3323,10 @@ passwd = getpass.getpass("Password: ")
 print("You entered " + passwd)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let passwd = inputsecret("Password: ")
-echo "You entered " .. passwd
+var passwd = inputsecret("Password: ")
+echo $"You entered {passwd}"
 ```
 
 *Help:* [inputsecret()](https://vimhelp.org/builtin.txt.html#inputsecret%28%29)
@@ -3341,11 +3340,11 @@ s = "vim"
 print("Editor = %s" % (s))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 echo "Hello World"
-let s = "vim"
-echo "Editor = " .. s
+var s = "vim"
+echo $"Editor = {s}"
 ```
 
 *Help:* [:echo](https://vimhelp.org/eval.txt.html#%3Aecho), [:echon](https://vimhelp.org/eval.txt.html#%3Aechon), [echoraw()](https://vimhelp.org/builtin.txt.html#echoraw%28%29), [:echohl](https://vimhelp.org/eval.txt.html#%3Aechohl), [:echoerr](https://vimhelp.org/eval.txt.html#%3Aechoerr), [:echomsg](https://vimhelp.org/eval.txt.html#%3Aechomsg)
@@ -3361,10 +3360,10 @@ print("Name: {}, ID: {}".format(name, id))
 print("Name: %s, ID: %d" % (name, id))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let name = "John"
-let id = 1001
+var name = "John"
+var id = 1001
 echo printf("Name: %s, ID: %d", name, id)
 ```
 
@@ -3386,19 +3385,19 @@ else:
     print("HOME = " + h)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let h = getenv('HOME')
+var h = getenv('HOME')
 if h == v:null
   echo 'HOME is not set'
 else
-  echo 'HOME = ' .. h
+  echo $'HOME = {h}'
 endif
 
 if !exists('$HOME')
   echo 'HOME is not set'
 else
-  echo 'HOME = ' .. $HOME
+  echo $'HOME = {$HOME}'
 endif
 ```
 
@@ -3412,11 +3411,11 @@ import os
 os.environ['FOO'] = "BAR"
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call setenv('FOO', 'BAR')
+setenv('FOO', 'BAR')
 
-let $FOO = 'BAR'
+$FOO = 'BAR'
 ```
 
 *Help:* [setenv()](https://vimhelp.org/builtin.txt.html#setenv%28%29), [:let-environment](https://vimhelp.org/eval.txt.html#%3alet-environment)
@@ -3429,10 +3428,11 @@ import os
 del os.environ['FOO']
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-call setenv('FOO', v:null)
+setenv('FOO', null)
 
+# Another method to unset an environment variable
 unlet $FOO
 ```
 
@@ -3446,7 +3446,7 @@ import os
 print(os.environ)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 echo environ()
 ```
@@ -3468,10 +3468,10 @@ for arg in sys.argv:
     print(arg)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-echo "Number of arguments = " .. len(v:argv)
-echo "Arguments = " .. string(v:argv)
+echo $"Number of arguments = {len(v:argv)}"
+echo $"Arguments = {string(v:argv)}"
 for arg in v:argv
   echo arg
 endfor
@@ -3497,14 +3497,14 @@ if re.search(r'E\d+:', s) is None:
     print("Test passed")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let s = 'Test failed with error E123:'
+var s = 'Test failed with error E123:'
 if s =~# 'E\d\+:'
   echo "Error code found"
 endif
 
-let s = 'Test successful'
+s = 'Test successful'
 if s !~# 'E\d\+:'
   echo "Test passed"
 endif
@@ -3523,13 +3523,13 @@ if m is not None:
     end_idx = m.end()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let idx = match("Abc 123 Def", '\d\+')
-let end_idx = matchend("Abc 123 Def", '\d\+')
+var idx = match("Abc 123 Def", '\d\+')
+var end_idx = matchend("Abc 123 Def", '\d\+')
 
-let l = matchstrpos("Abc 123 Def", '\d\+')
-echo "start:" l[1] "end:" l[2]
+var l = matchstrpos("Abc 123 Def", '\d\+')
+echo $"start = {l[1]}, end = {l[2]}"
 ```
 
 *Help:* [match()](https://vimhelp.org/builtin.txt.html#match%28%29), [matchend()](https://vimhelp.org/builtin.txt.html#matchend%28%29), [matchstrpos()](https://vimhelp.org/builtin.txt.html#matchstrpos%28%29)
@@ -3545,9 +3545,9 @@ if m is not None:
     print s
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let s = matchstr("Abc 123 Def", '\d\+')
+var s = matchstr("Abc 123 Def", '\d\+')
 ```
 
 *Help:* [matchstr()](https://vimhelp.org/builtin.txt.html#matchstr%28%29)
@@ -3563,9 +3563,9 @@ if m is not None:
     print("1: " + m.group(1) + " 2: " + m.group(2) + " 3: " + m.group(3))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let list = matchlist("foo bar baz", '\(\w\+\) \(\w\+\) \(\w\+\)')
+var list = matchlist("foo bar baz", '\(\w\+\) \(\w\+\) \(\w\+\)')
 echo "Full match:" list[0]
 echo "1:" list[1] "2:" list[2] "3:" list[3]
 ```
@@ -3581,9 +3581,9 @@ s = re.sub(r'bar', r'baz', "foo bar")
 print(s)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let s = substitute("foo bar", 'bar', 'baz', '')
+var s = substitute("foo bar", 'bar', 'baz', '')
 echo s
 ```
 
@@ -3603,16 +3603,16 @@ s = re.sub('-{1,2}', Dashrepl, 'pro----gram-files')
 print(s)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-function Dashrepl(m)
-  if a:m[0] == '-'
+def Dashrepl(m: list<string>): string
+  if m[0] == '-'
     return ' '
   else
     return '-'
   endif
-endfunction
-let s = substitute("pro----gram-files", '-\{1,2}', function('Dashrepl'), 'g')
+enddef
+var s = substitute("pro----gram-files", '-\{1,2}', function('Dashrepl'), 'g')
 echo s
 ```
 
@@ -3669,11 +3669,11 @@ print(data)
 print(data[0:4])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let data = 0z12F6ABFF.49C0883A.E2C142AA
+var data = 0z12F6ABFF.49C0883A.E2C142AA
 echo data
-echo data[0:3]
+echo data[0 : 3]
 ```
 
 *Help:* [blob](https://vimhelp.org/eval.txt.html#blob)
@@ -3689,12 +3689,12 @@ del data[2]
 print(data)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let data = 0z
-let data[0] = 0xC2
-let data += 0zB3F7A5
-call remove(data, 2)
+var data = 0z
+data[0] = 0xC2
+data += 0zB3F7A5
+remove(data, 2)
 echo data
 ```
 
@@ -3713,14 +3713,14 @@ l = list(data)
 print(l)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let l = [11, 12, 14]
-let data = list2blob(l)
+var l = [11, 12, 14]
+var data = list2blob(l)
 echo data
 
-let data = 0zDEADBEEF
-let  l = blob2list(data)
+data = 0zDEADBEEF
+l = blob2list(data)
 echo l
 ```
 
@@ -3737,10 +3737,10 @@ with open("data2.bin", "wb") as bin_fh:
     bin_fh.write(data)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let data = readblob('datafile.bin')
-call writefile(data, 'data2.bin')
+var data = readblob('datafile.bin')
+writefile(data, 'data2.bin')
 ```
 
 *Help:* [readblob()](https://vimhelp.org/builtin.txt.html#readblob%28%29), [writefile()](https://vimhelp.org/builtin.txt.html#writefile%28%29)
@@ -3761,14 +3761,14 @@ timer = threading.Timer(5, TimerCallback, args=["green"])
 timer.start()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-func TimerCallback(ctx, timer_id)
-  echo "Timer callback, context = " .. a:ctx .. ", id = " .. a:timer_id
-endfunc
+def TimerCallback(ctx: string, tid: number)
+  echo $"Timer callback, context = {ctx}, id = {tid}"
+enddef
 
-" Run a function after 5 seconds
-let timer_id = timer_start(5 * 1000, function('TimerCallback', ["green"]))
+# Run a function after 5 seconds
+var timer_id = timer_start(5 * 1000, function('TimerCallback', ["green"]))
 ```
 
 *Help:* [timer_start()](https://vimhelp.org/builtin.txt.html#timer_start%28%29)
@@ -3787,14 +3787,14 @@ timer = threading.Timer(5, TimerCallback)
 timer.start()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-func TimerCallback(timer_id)
+def TimerCallback(tid: number)
   echo "Timer callback"
-endfunc
+enddef
 
-" run a function every 5 seconds periodically
-let timer_id = timer_start(5 * 1000, function('TimerCallback'), {'repeat' : -1})
+# run a function every 5 seconds periodically
+var timer_id = timer_start(5 * 1000, function('TimerCallback'), {'repeat': -1})
 ```
 
 *Help:* [timer](https://vimhelp.org/eval.txt.html#timer)
@@ -3812,18 +3812,18 @@ timer.start()
 timer.cancel()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-func TimerCallback(timer_id)
+def TimerCallback(tid: number)
   echo "Timer callback"
-endfunc
+enddef
 
-" start a timer and then stop it
-let timer_id = timer_start(1000, 'TimerCallback')
-call timer_stop(timer_id)
+# start a timer and then stop it
+var timer_id = timer_start(1000, 'TimerCallback')
+timer_stop(timer_id)
 
-" to stop all the timers
-call timer_stopall()
+# to stop all the timers
+timer_stopall()
 ```
 
 *Help:* [timer_start()](https://vimhelp.org/builtin.txt.html#timer_start%28%29)
@@ -3837,11 +3837,11 @@ time.sleep(5)
 time.sleep(0.2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-" sleep for 5 seconds
+# sleep for 5 seconds
 sleep 5
-" sleep for 200 milliseconds
+# sleep for 200 milliseconds
 sleep 200m
 ```
 
@@ -3861,14 +3861,14 @@ str = json.dumps(v)
 x = json.loads(str)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let v = ['foo', {'a' : 3}, v:true]
-" encode data to JSON
-let str = v->json_encode()
+var v = ['foo', {'a': 3}, true]
+# encode data to JSON
+var str = v->json_encode()
 echo str
-" decode data from JSON
-let x = str->json_decode()
+# decode data from JSON
+var x = str->json_decode()
 echo x
 ```
 
@@ -3893,40 +3893,40 @@ def Display_Page():
 Display_Page()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let g:rcvd_data = []
+g:rcvd_data = []
 
-" channel data callback function. Called for every received line.
-func Chan_data_cb(ch, msg)
-  call add(g:rcvd_data, a:msg)
-endfunc
+# channel data callback function. Called for every received line.
+def Chan_data_cb(ch: channel, msg: string)
+  add(g:rcvd_data, msg)
+enddef
 
-" channel close callback function.
-func Chan_close_cb(ch)
+# channel close callback function.
+def Chan_close_cb(ch: channel)
   echo g:rcvd_data
-endfunc
+enddef
 
-func Display_Page()
-  let addr = "httpbin.org:80"
-  let ch_opt = {}
-  " data received is processed one line at a time
-  let ch_opt.mode = 'nl'
-  let ch_opt.waittime = -1
-  let ch_opt.drop = "never"
-  let ch_opt.callback = function('Chan_data_cb')
-  let ch_opt.close_cb = function('Chan_close_cb')
-  " open the channel
-  let ch = ch_open(addr, ch_opt)
+def Display_Page()
+  var addr = "httpbin.org:80"
+  var ch_opt = {}
+  # data received is processed one line at a time
+  ch_opt.mode = 'nl'
+  ch_opt.waittime = -1
+  ch_opt.drop = "never"
+  ch_opt.callback = function('Chan_data_cb')
+  ch_opt.close_cb = function('Chan_close_cb')
+  # open the channel
+  var ch = ch_open(addr, ch_opt)
   if ch_status(ch) != "open"
-    echomsg "Failed to open channel, status = " .. ch_status(ch)
+    echomsg $"Failed to open channel, status = {ch_status(ch)}"
     return
   endif
-  " send a http request
-  call ch_sendraw(ch, "GET / HTTP/1.0\nHost: httpbin.org\n\n")
-endfunc
+  # send a http request
+  ch_sendraw(ch, "GET / HTTP/1.0\nHost: httpbin.org\n\n")
+enddef
 
-call Display_Page()
+Display_Page()
 ```
 
 *Help:* [job-channel-overview](https://vimhelp.org/channel.txt.html#job-channel-overview), [ch_open()](https://vimhelp.org/channel.txt.html#ch_open%28%29), [ch_status()](https://vimhelp.org/channel.txt.html#ch_status%28%29), [ch_sendraw()](https://vimhelp.org/channel.txt.html#ch_sendraw%28%29), [ch_close()](https://vimhelp.org/channel.txt.html#ch_close%28%29)
@@ -3951,17 +3951,17 @@ print("Result = " + lines)
 print("Exitcode = " + str(procObj.returncode))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let job = job_start('bc')
+var job = job_start('bc')
 if job_status(job) != "run"
   echo "Failed to start bc"
 else
-  let output = ch_evalraw(job, "6 * 12\n")
-  echo "Result =" output
-  call job_stop(job, "kill")
-  let info = job_info(job)
-  echo "Exitcode = " info.exitval
+  var output = ch_evalraw(job, "6 * 12\n")
+  echo $"Result = {output}"
+  job_stop(job, "kill")
+  var info = job_info(job)
+  echo $"Exitcode = {info.exitval}"
 endif
 ```
 
@@ -3990,20 +3990,20 @@ class TestDemoMethods(unittest.TestCase):
 unittest.main()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let v:errors = []
-call assert_equal(tolower('FOO'), 'foo')
-call assert_notequal(1, 2)
-call assert_true('foo' == 'foo')
-call assert_false('FOO' == 'foo')
-call assert_fails('let l = split("a:b", [])', 'E730:')
-call assert_match('\d\+', 'ab123xy')
-call assert_notmatch('\d\+', 'abcd')
+v:errors = []
+assert_equal(tolower('FOO'), 'foo')
+assert_notequal(1, 2)
+assert_true('foo' == 'foo')
+assert_false('FOO' == 'foo')
+assert_fails('echo split("a:b", [])', 'E730:')
+assert_match('\d\+', 'ab123xy')
+assert_notmatch('\d\+', 'abcd')
 if len(v:errors) == 0
     echo "Test passed"
 else
-    echo "Test failed: ", v:errors
+    echo $"Test failed: {v:errors}"
 endif
 ```
 
