@@ -2168,9 +2168,9 @@ var d = string({a: 1, b: 2})
 Method|Python|Vim9Script
 ----|------|---------
 clear()| `d.clear()` | `call filter(d, '0')`
-copy()| `newDict = d.copy()` | `let newDict = d->copy()`
+copy()| `newDict = d.copy()` | `var newDict = d->copy()`
 fromkeys()| `d = dict.fromkeys(x)` | `Not available`
-get()| `v = d.get('red')` | `let v = d->get('red')`
+get()| `v = d.get('red')` | `var v = d->get('red')`
 in or has_key() | `'red' in d` | `d->has_key('red')`
 items()| `d.items()` | `d->items()`
 keys()| `d.keys()` | `d->keys()`
@@ -2194,7 +2194,7 @@ if a > b:
     print("a is greater than b")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 if a > b
   echo "a is greater than b"
@@ -2213,7 +2213,7 @@ else:
     print("a is less than or equal to b")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 if a > b
   echo "a is greater than b"
@@ -2236,7 +2236,7 @@ else:
     print("a is equal to b")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 if a > b
   echo "a is greater than b"
@@ -2257,7 +2257,7 @@ if a > b and (a > c or a > d):
     print "a is greater than b and greater than c or d"
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 if a > b && (a > c || a > d)
   echo "a is greater than b and greater than c or d"
@@ -2274,9 +2274,9 @@ if status == True:
         print("Nested if")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-if status == v:true
+if status == true
   if a >= 1
     echo "Nested if"
   endif
@@ -2295,7 +2295,7 @@ for i in range(5):
     print(i)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 for i in range(5)
   echo i
@@ -2313,7 +2313,7 @@ for i in ['a', 'b', 'c']:
     print(i)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 for i in ['a', 'b', 'c']
   if i == 'b'
@@ -2334,7 +2334,7 @@ for i in ['a', 'b', 'c']:
     print(i)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 for i in ['a', 'b', 'c']
   if i == 'b'
@@ -2354,11 +2354,11 @@ for i in range(10):
         print(str(i) + 'x' + str(j) + '=' + str(i * j))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
 for i in range(4)
   for j in range(4)
-    echo i .. 'x' .. j .. '=' .. i * j
+    echo $"{i} x {j} = {i * j}"
   endfor
 endfor
 ```
@@ -2377,12 +2377,12 @@ while i <= 5 :
    i += 1
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let i = 1
+var i = 1
 while i <= 5
   echo i
-  let i += 1
+  i += 1
 endwhile
 ```
 
@@ -2400,8 +2400,8 @@ i = 0    # First iteration
 
 **VimScript:**
 ```vim
-" This is a Vimscript comment
-let i = 0    " First iteration
+# This is a Vim9script comment
+var i = 0    # First iteration
 ```
 
 *Help:* [:comment](https://vimhelp.org/cmdline.txt.html#%3acomment)
