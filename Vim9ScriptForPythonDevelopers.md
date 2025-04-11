@@ -1402,9 +1402,9 @@ sort()| `m.sort()` | `m->sort()`
 t = (1, 2, 3, 4)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2, 3, 4)
+var t = (1, 2, 3, 4)
 ```
 
 *Help:* [Tuple](https://vimhelp.org/eval.txt.html#Tuple)
@@ -1418,11 +1418,11 @@ v1 = t[2]
 v2 = t[-2]
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2, 3, 4)
-let v1 = t[2]
-let v2 = t[-2]
+var t = (1, 2, 3, 4)
+var v1 = t[2]
+var v2 = t[-2]
 ```
 
 *Help:* [tuple-index](https://vimhelp.org/eval.txt.html#tuple-index)
@@ -1436,11 +1436,11 @@ t[1][0] = 5
 t[2]['a'] = 10
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, [2, 3], {'a': 6})
-let t[1][0] = 5
-let t[2]['a'] = 10
+var t = (1, [2, 3], {'a': 6})
+t[1][0] = 5
+t[2]['a'] = 10
 ```
 
 *Help:* [tuple-modification](https://vimhelp.org/eval.txt.html#tuple-modification)
@@ -1453,10 +1453,11 @@ t = (1, 2, 3)
 x = t.index(2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2, 3)
-let x = t->index(2)
+var t = (1, 2, 3)
+var x = t->index(2)
+echo x
 ```
 
 *Help:* [index()](https://vimhelp.org/builtin.txt.html#index%28%29)
@@ -1470,10 +1471,10 @@ idx = next((i for i, v in enumerate(colors) if v['color'] == 'blue'), -1)
 print(idx)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let colors = ({'color': 'red'}, {'color': 'blue'}, {'color': 'green'})
-let idx = indexof(colors, {i, v -> v.color == 'blue'})
+var colors = ({color: 'red'}, {color: 'blue'}, {color: 'green'})
+var idx = indexof(colors, (i, v) => v.color == 'blue')
 echo idx
 ```
 
@@ -1490,14 +1491,14 @@ print(t[1:3])
 print(t[2:])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2, 3, 4)
-echo t[1:3]
-echo t[2:]
-echo t[-2:]
+var t = (1, 2, 3, 4)
+echo t[1 : 3]
+echo t[2 :]
+echo t[-2 :]
 
-" slice() function excludes the item at the end index.
+# slice() function excludes the item at the end index.
 echo slice(t, 2, 3)
 echo slice(t, 2)
 ```
@@ -1511,9 +1512,10 @@ echo slice(t, 2)
 t = (1, 2) + (3 ,4)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2) + (3 ,4)
+var t = (1, 2) + (3, 4)
+echo t
 ```
 
 *Help:* [tuple-concatenation](https://vimhelp.org/eval.txt.html#tuple-concatenation)
@@ -1525,9 +1527,10 @@ let t = (1, 2) + (3 ,4)
 t = ('vim',) * 4
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = ('vim')->repeat(4)
+var t = ('vim')->repeat(4)
+echo t
 ```
 
 *Help:* [repeat()](https://vimhelp.org/builtin.txt.html#repeat%28%29)
@@ -1540,10 +1543,10 @@ t = (2, 4, 4, 5)
 x = t.count(4)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (2, 4, 4, 5)
-let x = t->count(2)
+var t = (2, 4, 4, 5)
+var x = t->count(2)
 ```
 
 *Help:* [count()](https://vimhelp.org/builtin.txt.html#count%28%29)
@@ -1556,10 +1559,10 @@ t = ('a', 'b', 'c')
 n = len(t)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = ('a', 'b', 'c')
-let n = t->len()
+var t = ('a', 'b', 'c')
+var n = t->len()
 ```
 
 *Help:* [len()](https://vimhelp.org/builtin.txt.html#len%28%29)
@@ -1581,21 +1584,21 @@ for i in range(len(t)):
   print(i, t[i])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (10, 20, 30)
+var t = (10, 20, 30)
 for v in t
   echo v
 endfor
 
-" Print both the tuple index and the value
-for [i, v] in items(t)
-  echo i v
+# Print both the tuple index and the value
+for [i, v2] in items(t)
+  echo i v2
 endfor
 
-" Use a for loop for tuple iteration
-for i in range(len(t))
-  echo i t[i]
+# Use a for loop for tuple iteration
+for i2 in range(len(t))
+  echo i2 t[i2]
 endfor
 ```
 
@@ -1610,9 +1613,9 @@ t.reverse()
 print(t)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (1, 2, 3)
+var t = (1, 2, 3)
 echo reverse(t)
 ```
 
@@ -1626,10 +1629,10 @@ t = (3, 2, 1)
 t2 = t.copy()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (3, 2, 1)
-let t2 = t->copy()
+var t = (3, 2, 1)
+var t2 = t->copy()
 ```
 
 *Help:* [copy()](https://vimhelp.org/builtin.txt.html#copy%28%29)
@@ -1643,10 +1646,10 @@ a = ([1, 2], [3, 4])
 b = copy.deepcopy(a)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let a = ([1, 2], [3, 4])
-let b = a->deepcopy()
+var a = ([1, 2], [3, 4])
+var b = a->deepcopy()
 ```
 
 *Help:* [deepcopy()](https://vimhelp.org/builtin.txt.html#deepcopy%28%29)
@@ -1668,16 +1671,16 @@ if t1 != t3:
   print("Tuples t1 and t3 are different")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t1 = (1, 2)
-let t2 = l1
-let t3 = (1, 2)
+var t1 = (1, 2)
+var t2 = t1
+var t3 = (1, 2)
 if t1 is t2
   echo "Tuples t1 and t2 refer to the same tuple"
 endif
 if t1 isnot t3
-  echo "Tuples t1 and t2 do not refer to the same tuple"
+  echo "Tuples t1 and t3 do not refer to the same tuple"
 endif
 if t1 == t3
   echo "Tuples t1 and t3 contain the same elements"
@@ -1703,17 +1706,16 @@ def SumNum(a, b):
 sum = reduce(SumNum, (1, 2, 3, 4))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-" using a lambda function
-let sum = reduce((1, 2, 3, 4), {x, y -> x + y})
+# using a lambda function
+var sum = reduce((1, 2, 3, 4), (x, y) => x + y)
 
-" using a function
-func SumNum(x, y)
-  return a:x + a:y
-endfunc
-let sum = reduce((1, 2, 3, 4), function('SumNum'))
-echo sum
+# using a function
+def SumNum(x: number, y: number): number
+  return x + y
+enddef
+var sum2 = reduce((1, 2, 3, 4), function('SumNum'))
 ```
 
 *Help:* [reduce()](https://vimhelp.org/builtin.txt.html#reduce%28%29)
@@ -1728,11 +1730,11 @@ v2 = max(t)
 print(v1, v2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let t = (3, 10, 8)
-let v1 = t->min()
-let v2 = t->max()
+var t = (3, 10, 8)
+var v1 = t->min()
+var v2 = t->max()
 echo v1 v2
 ```
 
@@ -1745,16 +1747,16 @@ echo v1 v2
 s = str((3, 5, 7))
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let s = string((3, 5, 7))
+var s = string((3, 5, 7))
 ```
 
 *Help:* [string()](https://vimhelp.org/builtin.txt.html#string%28%29)
 
 ### Tuple Methods
 
-Method|Python|VimScript
+Method|Python|Vim9Script
 ----|------|---------
 copy()| `m.copy()` | `m->copy()`
 count()| `m.count(6)` | `m->count(6)`
@@ -1764,6 +1766,7 @@ reverse()| `m.reverse()` | `m->reverse()`
 *Help:* [tuple-functions](https://vimhelp.org/usr_41.txt.html#tuple-functions)
 
 ------------------------------------------------------------------------------
+
 ## Dictionary
 
 ### Creating a Dict
@@ -1774,11 +1777,10 @@ d = {'red' : 10, 'blue' : 20}
 x = {}
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-let d = #{red : 10, blue : 20}
-let x = {}
+var d = {red: 10, blue: 20}
+var x = {}
 ```
 
 *Help:* [Dict](https://vimhelp.org/eval.txt.html#Dict)
@@ -1791,11 +1793,11 @@ d = {'red' : 10, 'blue' : 20}
 x = d['red']
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = #{red : 10, blue : 20}
-let x = d['red']
-let x = d.red
+var d = {red: 10, blue: 20}
+var x = d['red']
+x = d.red
 ```
 
 *Help:* [dict](https://vimhelp.org/eval.txt.html#dict)
@@ -1808,10 +1810,10 @@ d = {'red' : 10, 'blue' : 20}
 d['red'] = 15
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = #{red : 10, blue : 20}
-let d.red = 15
+var d = {red: 10, blue: 20}
+d.red = 15
 ```
 
 *Help:* [dict-modification](https://vimhelp.org/eval.txt.html#dict-modification)
@@ -1824,10 +1826,10 @@ d = {'red' : 10, 'blue' : 20}
 v = d.get('red')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-let v = get(d, 'red')
+var d = {red: 10, blue: 20}
+var v = d->get('red')
 ```
 
 *Help:* [get()](https://vimhelp.org/builtin.txt.html#get%28%29)
@@ -1840,10 +1842,10 @@ d = {'red' : 10, 'blue' : 20}
 d['green'] = 30
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-let d.green = 30
+var d = {red: 10, blue: 20}
+d.green = 30
 ```
 
 *Help:* [dict-modification](https://vimhelp.org/eval.txt.html#dict-modification)
@@ -1856,10 +1858,10 @@ d = {}
 d.update({'color' : 'grey'})
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {}
-eval d->extend({'color' : 'grey'})
+var d = {}
+eval d->extend({color: 'grey'})
 ```
 
 *Help:* [extend()](https://vimhelp.org/builtin.txt.html#extend%28%29)
@@ -1872,10 +1874,10 @@ d = {'red' : 10, 'blue' : 20}
 d.pop('red')
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-call remove(d, 'red')
+var d = {red: 10, blue: 20}
+d->remove('red')
 ```
 
 *Help:* [remove()](https://vimhelp.org/builtin.txt.html#remove%28%29),
@@ -1888,10 +1890,10 @@ d = {'red' : 10, 'blue' : 20}
 d.clear()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-call filter(d, "0")
+var d = {red: 10, blue: 20}
+d->filter("0")
 ```
 
 *Help:* [dict-modification](https://vimhelp.org/eval.txt.html#dict-modification)
@@ -1904,10 +1906,10 @@ d = {'red' : 10, 'blue' : 20}
 n = len(d)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-let n = d->len()
+var d = {red: 10, blue: 20}
+var n = d->len()
 ```
 
 *Help:* [len()](https://vimhelp.org/builtin.txt.html#len%28%29)
@@ -1921,10 +1923,10 @@ x = sum(n == 10 for n in d.values())
 print(x)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 10}
-let x = d->count(10)
+var d = {red: 10, blue: 10}
+var x = d->count(10)
 echo x
 ```
 
@@ -1939,9 +1941,9 @@ if 'red' in d:
     print("found red key")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
+var d = {red: 10, blue: 20}
 if d->has_key('red')
   echo "found red key"
 endif
@@ -1960,14 +1962,14 @@ for k in d:
     print(d[k])
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-for k in keys(d)
+var d = {red: 10, blue: 20}
+for k in d->keys()
   echo k
 endfor
-for k in d->keys()
-  echo d[k]
+for k2 in d->keys()
+  echo d[k2]
 endfor
 ```
 
@@ -1982,9 +1984,9 @@ for v in d.values():
     print(v)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
+var d = {red: 10, blue: 20}
 for v in d->values()
   echo v
 endfor
@@ -2001,9 +2003,9 @@ for k, v in d.items():
     print(k, v)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
+var d = {red: 10, blue: 20}
 for [k, v] in d->items()
   echo k v
 endfor
@@ -2019,10 +2021,10 @@ d = {'red' : 10, 'blue' : 20}
 new_d = d.copy()
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'blue' : 20}
-let new_d = d->copy()
+var d = {red: 10, blue: 20}
+var new_d = d->copy()
 ```
 
 *Help:* [copy()](https://vimhelp.org/builtin.txt.html#copy%28%29)
@@ -2036,10 +2038,10 @@ a = {'x' : [1, 2], 'y' : [3, 4]}
 b = copy.deepcopy(a)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let a = {'x' : [1, 2], 'y' : [3, 4]}
-let b = a->deepcopy()
+var a = {x: [1, 2], y: [3, 4]}
+var b = a->deepcopy()
 ```
 
 *Help:* [deepcopy()](https://vimhelp.org/builtin.txt.html#deepcopy%28%29)
@@ -2059,14 +2061,14 @@ if d2 is not d3:
   print("Dicts d2 and d3 do not refer to the same dict")
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d1 = {'a' : 10, 'b' : 20}
-let d2 = {'a' : 10, 'b' : 20}
+var d1 = {a: 10, b: 20}
+var d2 = {a: 10, b: 20}
 if d1 == d2
   echo "Dicts d1 and d2 have the same content"
 endif
-let d3 = d1
+var d3 = d1
 if d1 is d3
   echo "Dicts d1 and d3 refer to the same dict"
 endif
@@ -2092,11 +2094,11 @@ d3 = {k: v for [k, v] in d1.items() if v == 10}
 print(d1, d3)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d1 = {'red' : 10, 'green' : 20, 'blue' : 10}
-" filter dict items with value 10
-let d2 = copy(d1)->filter({k, v -> v == 10})
+var d1 = {red: 10, green: 20, blue: 10}
+# filter dict items with value 10
+var d2 = copy(d1)->filter((k, v) => v == 10)
 echo d1 d2
 ```
 
@@ -2117,11 +2119,11 @@ d3 = {k: v + 5 for k, v in d1.items()}
 print(d1, d3)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d1 = {'red' : 10, 'green' : 20, 'blue' : 30}
-" increment the values by 5
-let d2 = copy(d1)->map({k, v -> v + 5})
+var d1 = {red: 10, green: 20, blue: 30}
+# increment the values by 5
+var d2 = copy(d1)->map((k, v) => v + 5)
 echo d1 d2
 ```
 
@@ -2137,11 +2139,11 @@ v2 = max(d.values())
 print(v1, v2)
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = {'red' : 10, 'green' : 20}
-let v1 = d->min()
-let v2 = d->max()
+var d = {red: 10, green: 20}
+var v1 = d->min()
+var v2 = d->max()
 echo v1 v2
 ```
 
@@ -2154,16 +2156,16 @@ echo v1 v2
 d = str({'a' : 1, 'b' : 2})
 ```
 
-**VimScript:**
+**Vim9Script:**
 ```vim
-let d = string({'a' : 1, 'b' : 2})
+var d = string({a: 1, b: 2})
 ```
 
 *Help:* [string()](https://vimhelp.org/builtin.txt.html#string%28%29)
 
 ### Dictionary Methods
 
-Method|Python|VimScript
+Method|Python|Vim9Script
 ----|------|---------
 clear()| `d.clear()` | `call filter(d, '0')`
 copy()| `newDict = d.copy()` | `let newDict = d->copy()`
