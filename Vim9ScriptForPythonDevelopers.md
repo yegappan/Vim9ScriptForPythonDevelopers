@@ -2167,14 +2167,14 @@ var d = string({a: 1, b: 2})
 
 Method|Python|Vim9Script
 ----|------|---------
-clear()| `d.clear()` | `call filter(d, '0')`
+clear()| `d.clear()` | `filter(d, '0')`
 copy()| `newDict = d.copy()` | `var newDict = d->copy()`
 fromkeys()| `d = dict.fromkeys(x)` | `Not available`
 get()| `v = d.get('red')` | `var v = d->get('red')`
 in or has_key() | `'red' in d` | `d->has_key('red')`
 items()| `d.items()` | `d->items()`
 keys()| `d.keys()` | `d->keys()`
-pop()| `d.pop('red')` | `call d->remove('red')`
+pop()| `d.pop('red')` | `d->remove('red')`
 popitem()| `d.popitem()` | `Not available`
 setdefault()| `d.setdefault('red', 10)` | `Not available`
 update()| `d.update({'a' : 10, 'b' : 20}` | `d->extend({'a' : 10, 'b' : 20})`
@@ -2562,7 +2562,7 @@ def EchoValue(v: number)
   echo v
 enddef
 
-call EchoValue(100)
+EchoValue(100)
 ```
 
 *Help:* [:call](https://vimhelp.org/eval.txt.html#%3acall)
