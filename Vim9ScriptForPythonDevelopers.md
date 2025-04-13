@@ -22,6 +22,7 @@ The Github repository for this gist is available at: https://github.com/yegappan
 * [List](#list)
 * [Tuple](#tuple)
 * [Dictionary](#dictionary)
+* [Enum](#enum)
 * [If Statement](#if-statement)
 * [For Loop](#for-loop)
 * [While Loop](#while-loop)
@@ -133,7 +134,6 @@ i = textwrap.dedent("""
 
 **Vim9Script:**
 ```vim
-vim9script
 var i =<< trim END
   one
   two three
@@ -2184,6 +2184,119 @@ values()| `d.values()` | `d->values()`
 
 ------------------------------------------------------------------------------
 
+## Enum
+
+### Defining an Enum
+
+**Python:**
+```python
+from enum import Enum
+
+class Color(Enum):
+  RED = 1
+  GREEN = 2
+  BLUE = 3
+```
+
+**Vim9Script:**
+```vim
+enum Color
+  RED,
+  GREEN,
+  BLUE
+endenum
+```
+
+*Help:* [enum](https://vimhelp.org/vim9class.txt.html#enum)
+
+### Using a Enum value
+
+**Python:**
+```python
+from enum import Enum
+
+class Color(Enum):
+  RED = 1
+  GREEN = 2
+  BLUE = 3
+
+print(Color.RED)
+```
+
+**Vim9Script:**
+```vim
+enum Color
+  RED,
+  GREEN,
+  BLUE
+endenum
+
+echo Color.RED
+```
+
+*Help:* [enumvalue](https://vimhelp.org/vim9class.txt.html#enumvalue)
+
+### Accessing Enum name and ordinal
+
+**Python:**
+```python
+from enum import Enum
+
+class Color(Enum):
+  RED = 1
+  GREEN = 2
+  BLUE = 3
+
+print(Color.GREEN.name)
+print(Color.GREEN.value)
+```
+
+**Vim9Script:**
+```vim
+enum Color
+  RED,
+  GREEN,
+  BLUE
+endenum
+
+echo Color.GREEN.name
+echo Color.GREEN.ordinal
+```
+
+*Help:* [enum-name](https://vimhelp.org/vim9class.txt.html#enum-name), [enum-ordinal](https://vimhelp.org/vim9class.txt.html#enum-ordinal)
+
+### Iterating through enum values
+
+**Python:**
+```python
+from enum import Enum
+
+class Color(Enum):
+  RED = 1
+  GREEN = 2
+  BLUE = 3
+
+for e in Color:
+  print(e)
+```
+
+**Vim9Script:**
+```vim
+enum Color
+  RED,
+  GREEN,
+  BLUE
+endenum
+
+for e in Color.values
+  echo e.name
+endfor
+```
+
+*Help:* [enum-values](https://vimhelp.org/vim9class.txt.html#enum-values)
+
+------------------------------------------------------------------------------
+
 ## If statement
 
 ### Basic If statement
@@ -2699,32 +2812,10 @@ class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
-
-    def getX(self):
-        return self.x
-
-    def getY(self):
-        return self.y
-
-    def setX(self, x):
-        self.x = x
-
-    def setY(self, y):
-        self.y = y
-
-    def Print(self):
-        print(f"Pt = ({self.x}, {self.y})")
-
-pt = Point(10, 20)
-pt.setX(40)
-pt.setY(50)
-pt.Print()
-print(f"x = {pt.getX()}, y = {pt.getY()}")
 ```
 
 **Vim9Script:**
 ```vim
-vim9script
 class Point
   var x: number
   var y: number
@@ -2733,36 +2824,35 @@ class Point
     this.x = x
     this.y = y
   enddef
-
-  def GetX(): number
-    return this.x
-  enddef
-
-  def GetY(): number
-    return this.y
-  enddef
-
-  def SetX(x: number)
-    this.x = x
-  enddef
-
-  def SetY(y: number)
-    this.y = y
-  enddef
-
-  def Print()
-    echo $"Pt = ({this.x}, {this.y})"
-  enddef
 endclass
-
-var pt = Point.new(10, 20)
-pt.SetX(40)
-pt.SetY(50)
-pt.Print()
-echo $"x = {pt.GetX()}, y = {pt.GetY()}"
 ```
 
 *Help:* [vim9-class](https://vimhelp.org/vim9class.txt.html#vim9-class)
+
+### Instantiating a class
+
+**Python:**
+```python
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+p = Point(10, 20)
+```
+
+**Vim9Script:**
+```vim
+class Point
+  var x: number
+  var y: number
+endclass
+
+var p = Point.new(10, 20)
+```
+
+*Help:* [vim9-class](https://vimhelp.org/vim9class.txt.html#new())
+
 
 ------------------------------------------------------------------------------
 
