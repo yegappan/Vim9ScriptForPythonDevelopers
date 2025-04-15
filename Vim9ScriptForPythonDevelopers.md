@@ -2853,6 +2853,202 @@ var p = Point.new(10, 20)
 
 *Help:* [vim9-class](https://vimhelp.org/vim9class.txt.html#new())
 
+### Class Methods and Class Variables
+
+**Python:**
+```python
+class Student():
+    next_ID = 0
+
+    @classmethod
+    def getNextID(cls):
+        cls.next_ID += 1
+        return cls.next_ID
+
+print(Student.getNextID())
+```
+
+**Vim9Script:**
+```vim
+class Student
+  static var next_ID: number = 0
+
+  static def GetNextID(): number
+    next_ID += 1
+    return next_ID
+  enddef
+endclass
+
+echo Student.GetNextID()
+```
+
+*Help:* [class-method](https://vimhelp.org/vim9class.txt.html#class-method), [Vim9-class-member](https://vimhelp.org/vim9class.txt.html#Vim9-class-member)
+
+### Extending a class
+
+**Python:**
+```python
+class Animal:
+    def __init__(self, name):
+        self.name = name
+
+class Dog(Animal):
+    def __init__(self, name, breed):
+        super().__init__(name)
+        self.breed = breed
+
+    def Show(self):
+        print(f"name = {self.name}, breed = {self.breed}")
+
+a = Dog('Cooper', 'Beagle')
+a.Show()
+```
+
+**Vim9Script:**
+```vim
+class Animal
+    var name: string
+
+    def new(name: string)
+        this.name = name
+    enddef
+endclass
+
+class Dog extends Animal
+    var breed: string
+
+    def new(name: string, breed: string)
+	this.name = name
+        this.breed = breed
+    enddef
+
+    def Show()
+        echo $"name = {this.name}, breed = {this.breed}"
+    enddef
+endclass
+
+var a = Dog.new('Cooper', 'Beagle')
+a.Show()
+```
+
+*Help:* [extends](https://vimhelp.org/vim9class.txt.html#extends)
+
+### Abstract class and methods
+
+**Python:**
+```python
+from abc import ABC, abstractmethod
+
+class Shape(ABC):
+    @abstractmethod
+    def area(self):
+        pass
+
+    @abstractmethod
+    def perimeter(self):
+        pass
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+
+    def area(self):
+        return self.side * self.side
+
+    def perimeter(self):
+        return 4 * self.side
+
+square = Square(4)
+print(f"Square area: {square.area()}")
+print(f"Square perimeter: {square.perimeter()}")
+```
+
+**Vim9Script:**
+```vim
+abstract class Shape
+  abstract def Area(): number
+  abstract def Perimeter(): number
+endclass
+
+class Square extends Shape
+  var side: number
+
+  def new(side: number)
+    this.side = side
+  enddef
+
+  def Area(): number
+    return this.side * this.side
+  enddef
+
+  def Perimeter(): number
+    return 4 * this.side
+  enddef
+endclass
+
+var square = Square.new(4)
+echo $"Square area: {square.Area()}"
+echo $"Square perimeter: {square.Perimeter()}"
+```
+
+*Help:* [Vim9-abstract-class](https://vimhelp.org/vim9class.txt.html#Vim9-abstract-class), [abstract-method](https://vimhelp.org/vim9class.txt.html#abstract-method)
+
+### Interface
+
+**Python:**
+```python
+from abc import ABC, abstractmethod
+
+class Intf1(ABC):
+    @abstractmethod
+    def Method1(self, param1):
+        pass
+
+class Intf2(ABC):
+    @abstractmethod
+    def Method2(self, param1):
+        pass
+
+class SomeClass(Intf1, Intf2):
+    def Method1(self, param1):
+        print(f"Method1: param = {param1}")
+
+    def Method2(self, param1):
+        print(f"Method2: param = {param1}")
+
+c = SomeClass()
+c.Method1('foo')
+c.Method2('bar')
+```
+
+**Vim9Script:**
+```vim
+vim9script
+
+interface Intf1
+  def Method1(param1: string)
+endinterface
+
+interface Intf2
+  def Method2(param1: string)
+endinterface
+
+class SomeClass implements Intf1, Intf2
+  def Method1(param1: string)
+    echo $"param = {param1}"
+  enddef
+
+  def Method2(param1: string)
+    echo $"param = {param1}"
+  enddef
+endclass
+
+var c = SomeClass.new()
+c.Method1('foo')
+c.Method2('bar')
+```
+
+*Help:* [Interface](https://vimhelp.org/vim9class.txt.html#Interface)
 
 ------------------------------------------------------------------------------
 
